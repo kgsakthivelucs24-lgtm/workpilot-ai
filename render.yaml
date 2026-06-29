@@ -8,5 +8,5 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: OPENAI_MODEL
-        value: gpt-4.1-mini
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant

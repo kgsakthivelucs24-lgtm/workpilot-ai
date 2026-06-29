@@ -5,8 +5,9 @@ const path = require("path");
 const root = __dirname;
 const port = Number(process.env.PORT || 8787);
 const host = process.env.HOST || (process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1");
-const apiKey = process.env.OPENAI_API_KEY || "";
-const model = process.env.OPENAI_MODEL || "gpt-4.1-mini";
+const apiKey = process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY || "";
+const provider = process.env.GROQ_API_KEY ? "Groq" : "OpenAI";
+const model = process.env.GROQ_MODEL || process.env.OPENAI_MODEL || "llama-3.1-8b-instant";
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -45,14 +46,7 @@ function readBody(req) {
 }
 
 function extractOutputText(payload) {
-  if (typeof payload.output_text === "string") return payload.output_text;
-  const parts = [];
-  for (const item of payload.output || []) {
-    for (const content of item.content || []) {
-      if (content.text) parts.push(content.text);
-    }
-  }
-  return parts.join("\n");
+  return payload.choices?.[0]?.message?.content || "";
 }
 
 function parseAiJson(text) {
@@ -61,8 +55,8 @@ function parseAiJson(text) {
   return JSON.parse(cleaned);
 }
 
-async function callOpenAi(tool, data) {
-  const input = [
+async function callAi(tool, data) {
+  const messages = [
     {
       role: "system",
       content:
@@ -82,7 +76,7 @@ async function callOpenAi(tool, data) {
     }
   ];
 
-  const response = await fetch("https://api.openai.com/v1/responses", {
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -90,14 +84,14 @@ async function callOpenAi(tool, data) {
     },
     body: JSON.stringify({
       model,
-      input,
+      messages,
       temperature: 0.4
     })
   });
 
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(`OpenAI error ${response.status}: ${detail}`);
+    throw new Error(`${provider} error ${response.status}: ${detail}`);
   }
 
   const payload = await response.json();
@@ -106,8 +100,8 @@ async function callOpenAi(tool, data) {
   return parsed;
 }
 
-async function callOpenAiAssistant(tool, question, data) {
-  const response = await fetch("https://api.openai.com/v1/responses", {
+async function callAiAssistant(tool, question, data) {
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -115,7 +109,7 @@ async function callOpenAiAssistant(tool, question, data) {
     },
     body: JSON.stringify({
       model,
-      input: [
+      messages: [
         {
           role: "system",
           content:
@@ -141,7 +135,7 @@ async function callOpenAiAssistant(tool, question, data) {
 
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(`OpenAI assistant error ${response.status}: ${detail}`);
+    throw new Error(`${provider} assistant error ${response.status}: ${detail}`);
   }
 
   return extractOutputText(await response.json()).trim();
@@ -172,13 +166,13 @@ function serveStatic(req, res) {
 const server = http.createServer(async (req, res) => {
   try {
     if (req.method === "GET" && req.url === "/api/health") {
-      sendJson(res, 200, { ok: true, ai: apiKey ? "live" : "local", model: apiKey ? model : null });
+      sendJson(res, 200, { ok: true, ai: apiKey ? "live" : "local", provider: apiKey ? provider : null, model: apiKey ? model : null });
       return;
     }
 
     if (req.method === "POST" && req.url === "/api/generate") {
       if (!apiKey) {
-        sendJson(res, 503, { error: "OPENAI_API_KEY is not configured" });
+        sendJson(res, 503, { error: "GROQ_API_KEY is not configured" });
         return;
       }
 
@@ -188,14 +182,14 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      const result = await callOpenAi(body.tool, body.data);
+      const result = await callAi(body.tool, body.data);
       sendJson(res, 200, { ...result, mode: "live" });
       return;
     }
 
     if (req.method === "POST" && req.url === "/api/assist") {
       if (!apiKey) {
-        sendJson(res, 503, { error: "OPENAI_API_KEY is not configured" });
+        sendJson(res, 503, { error: "GROQ_API_KEY is not configured" });
         return;
       }
 
@@ -205,7 +199,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      const answer = await callOpenAiAssistant(body.tool, body.question, body.data || {});
+      const answer = await callAiAssistant(body.tool, body.question, body.data || {});
       sendJson(res, 200, { answer, mode: "live" });
       return;
     }
@@ -224,5 +218,5 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(port, host, () => {
   console.log(`WorkPilot AI running at http://${host}:${port}`);
-  console.log(apiKey ? `Live AI enabled with model ${model}` : "OPENAI_API_KEY missing. Frontend will use local fallback.");
+  console.log(apiKey ? `Live AI enabled via ${provider} with model ${model}` : "GROQ_API_KEY missing. Frontend will use local fallback.");
 });
