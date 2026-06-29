@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WorkPilot AI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar" aria-label="Primary">
+      <div class="brand">
+        <div class="brand-mark">WP</div>
+        <div>
+          <strong>WorkPilot AI</strong>
+          <span>AI work studio</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">Dashboard</button>
+        <button class="nav-item" data-view="resume">Resume</button>
+        <button class="nav-item" data-view="study">Study Planner</button>
+        <button class="nav-item" data-view="meeting">Meeting Notes</button>
+        <button class="nav-item" data-view="content">Content Calendar</button>
+        <button class="nav-item" data-view="document">Document Summary</button>
+        <button class="nav-item" data-view="pricing">Pricing</button>
+        <button class="nav-item" data-view="legal">Legal</button>
+      </nav>
+      <div class="usage-box">
+        <div class="usage-head">
+          <span id="planLabel">Free credits</span>
+          <b id="planBadge">Trial</b>
+        </div>
+        <strong><span id="credits">5</span><small id="creditLimit">/5 left</small></strong>
+        <div class="meter"><i id="creditMeter"></i></div>
+        <button class="secondary full" data-view-jump="pricing">Upgrade</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Workspace</p>
+          <h1 id="viewTitle">Dashboard</h1>
+        </div>
+        <div class="top-actions">
+          <button class="secondary ai-status" id="aiStatus" type="button">AI: checking</button>
+          <button class="secondary" id="accountBtn">Sign in</button>
+          <button class="secondary" id="clearDataBtn">Clear saved</button>
+          <button class="primary" data-view-jump="resume">New project</button>
+        </div>
+      </header>
+
+      <section class="view active" id="dashboard">
+        <section class="hero-panel">
+          <div>
+            <p class="eyebrow">Launch-ready concept</p>
+            <h2>One focused AI workspace for career, study, meetings, content, and documents.</h2>
+            <p>Start with free credits, generate useful drafts, save projects locally, and upgrade later when payments and real AI APIs are connected.</p>
+          </div>
+          <div class="hero-metrics" aria-label="Business model">
+            <span>Freemium</span>
+            <strong>$5-$12/mo</strong>
+            <small>Subscriptions + paid exports</small>
+          </div>
+        </section>
+        <div class="stats-grid">
+          <div class="stat"><span>Tools</span><strong>5</strong></div>
+          <div class="stat"><span>Saved projects</span><strong id="savedCount">0</strong></div>
+          <div class="stat"><span>Plan</span><strong id="planName">Free</strong></div>
+          <div class="stat"><span>Status</span><strong>MVP</strong></div>
+        </div>
+        <div class="tool-grid">
+          <article class="tool-card" data-view-jump="resume">
+            <span class="tool-icon">CV</span>
+            <h2>Resume Builder</h2>
+            <p>Create a resume summary, experience bullets, skills, and a cover letter draft.</p>
+          </article>
+          <article class="tool-card" data-view-jump="study">
+            <span class="tool-icon">SP</span>
+            <h2>Study Planner</h2>
+            <p>Turn subjects, deadlines, and available hours into a focused weekly plan.</p>
+          </article>
+          <article class="tool-card" data-view-jump="meeting">
+            <span class="tool-icon">MN</span>
+            <h2>Meeting Notes</h2>
+            <p>Extract summary, decisions, action items, and a follow-up message.</p>
+          </article>
+          <article class="tool-card" data-view-jump="content">
+            <span class="tool-icon">CC</span>
+            <h2>Content Calendar</h2>
+            <p>Plan posts, captions, hooks, and calls to action for a niche or business.</p>
+          </article>
+          <article class="tool-card" data-view-jump="document">
+            <span class="tool-icon">DS</span>
+            <h2>Document Summary</h2>
+            <p>Summarize long text and flag obligations, risks, dates, and next steps.</p>
+          </article>
+        </div>
+        <section class="panel">
+          <div class="section-head">
+            <h2>Recent Projects</h2>
+            <span id="emptyState">Nothing saved yet</span>
+          </div>
+          <div id="savedProjects" class="saved-list"></div>
+        </section>
+      </section>
+
+      <section class="view" id="resume">
+        <form class="workspace" data-tool="resume">
+          <div class="form-panel">
+            <div class="form-title">
+              <span>Career tool</span>
+              <h2>Complete resume builder</h2>
+            </div>
+            <label>Full name<input name="name" placeholder="Aarav Kumar" required /></label>
+            <label>Email and phone<input name="contact" placeholder="aarav@email.com | +91 98765 43210" /></label>
+            <label>City and links<input name="links" placeholder="Chennai | LinkedIn | GitHub | Portfolio" /></label>
+            <label>Target role<input name="role" placeholder="Frontend Developer" required /></label>
+            <label>Experience level<input name="experience" placeholder="2 years, fresher, senior..." /></label>
+            <label>Education<textarea name="education" placeholder="B.Tech Computer Science, XYZ University, 2026 | CGPA 8.2"></textarea></label>
+            <label>Skills<textarea name="skills" placeholder="React, SQL, communication, customer support"></textarea></label>
+            <label>Work experience<textarea name="work" placeholder="Company, role, dates, responsibilities, tools used, measurable impact"></textarea></label>
+            <label>Projects<textarea name="projects" placeholder="Project name, tech stack, what it does, your contribution, result"></textarea></label>
+            <label>Achievements<textarea name="achievements" placeholder="Awards, internships, metrics, leadership, competition wins, performance improvements"></textarea></label>
+            <label>Certifications<textarea name="certifications" placeholder="AWS Cloud Practitioner, Google UX certificate, internship certificate"></textarea></label>
+            <label>Job description<textarea name="job" placeholder="Paste the job post for matching"></textarea></label>
+            <button class="primary" type="submit">Generate Professional Resume</button>
+          </div>
+          <output class="result-panel" data-result="resume"></output>
+        </form>
+      </section>
+
+      <section class="view" id="study">
+        <form class="workspace" data-tool="study">
+          <div class="form-panel">
+            <div class="form-title">
+              <span>Learning tool</span>
+              <h2>Complete study planner</h2>
+            </div>
+            <label>Exam or goal<input name="goal" placeholder="Semester exams, IELTS, AWS certification" required /></label>
+            <label>Subjects<textarea name="subjects" placeholder="Math, physics, networking, speaking practice"></textarea></label>
+            <label>Syllabus or chapters<textarea name="syllabus" placeholder="Unit 1 algebra, Unit 2 calculus, networking basics, speaking task 1"></textarea></label>
+            <label>Deadline<input name="deadline" type="date" /></label>
+            <label>Current level<select name="level"><option>Beginner</option><option>Average</option><option>Good</option><option>Revision only</option></select></label>
+            <label>Hours per day<input name="hours" type="number" min="1" max="12" value="2" /></label>
+            <label>Study days per week<input name="days" type="number" min="1" max="7" value="6" /></label>
+            <label>Preferred study time<select name="time"><option>Morning</option><option>Afternoon</option><option>Evening</option><option>Night</option></select></label>
+            <label>Weak areas<textarea name="weakness" placeholder="Topics you find difficult"></textarea></label>
+            <label>Target score or outcome<input name="target" placeholder="85%+, Band 7, pass certification, finish full syllabus" /></label>
+            <button class="primary" type="submit">Generate Study Plan</button>
+          </div>
+          <output class="result-panel" data-result="study"></output>
+        </form>
+      </section>
+
+      <section class="view" id="meeting">
+        <form class="workspace" data-tool="meeting">
+          <div class="form-panel">
+            <div class="form-title">
+              <span>Team tool</span>
+              <h2>Complete meeting organizer</h2>
+            </div>
+            <label>Meeting title<input name="title" placeholder="Client onboarding call" required /></label>
+            <label>Meeting date<input name="date" type="date" /></label>
+            <label>Raw notes<textarea name="notes" placeholder="Paste transcript or rough notes"></textarea></label>
+            <label>Attendees<input name="attendees" placeholder="Asha, Ravi, client team" /></label>
+            <label>Meeting objective<input name="objective" placeholder="Finalize onboarding plan, review sprint, approve proposal" /></label>
+            <label>Key decisions<textarea name="decisions" placeholder="Budget approved, launch date moved, design option B selected"></textarea></label>
+            <label>Open questions<textarea name="questions" placeholder="Who owns analytics? When will client send assets?"></textarea></label>
+            <label>Action owners<textarea name="owners" placeholder="Ravi: send proposal by Friday, Asha: prepare designs"></textarea></label>
+            <label>Tone for follow-up<select name="tone"><option>Professional</option><option>Friendly</option><option>Brief</option></select></label>
+            <button class="primary" type="submit">Generate Meeting Pack</button>
+          </div>
+          <output class="result-panel" data-result="meeting"></output>
+        </form>
+      </section>
+
+      <section class="view" id="content">
+        <form class="workspace" data-tool="content">
+          <div class="form-panel">
+            <div class="form-title">
+              <span>Creator tool</span>
+              <h2>Complete content calendar</h2>
+            </div>
+            <label>Brand or niche<input name="brand" placeholder="Local bakery, fitness coach, study channel" required /></label>
+            <label>Platform<select name="platform"><option>Instagram</option><option>LinkedIn</option><option>YouTube Shorts</option><option>TikTok</option></select></label>
+            <label>Audience<input name="audience" placeholder="College students, small business owners, job seekers" /></label>
+            <label>Goal<input name="goal" placeholder="Get leads, launch offer, grow audience" /></label>
+            <label>Offer or topic<textarea name="topic" placeholder="What should the content promote?"></textarea></label>
+            <label>Brand tone<select name="tone"><option>Helpful</option><option>Professional</option><option>Bold</option><option>Friendly</option></select></label>
+            <label>Posting frequency<select name="frequency"><option>7 posts/week</option><option>5 posts/week</option><option>3 posts/week</option></select></label>
+            <label>Important dates<textarea name="dates" placeholder="Launch day, festival sale, webinar date, exam date"></textarea></label>
+            <button class="primary" type="submit">Generate Content Calendar</button>
+          </div>
+          <output class="result-panel" data-result="content"></output>
+        </form>
+      </section>
+
+      <section class="view" id="document">
+        <form class="workspace" data-tool="document">
+          <div class="form-panel">
+            <div class="form-title">
+              <span>Document tool</span>
+              <h2>Complete document analyzer</h2>
+            </div>
+            <label>Document type<select name="type"><option>Contract</option><option>Policy</option><option>Research article</option><option>Long email</option></select></label>
+            <label>Document title<input name="title" placeholder="Service agreement, privacy policy, research paper" /></label>
+            <label>Text to summarize<textarea name="text" placeholder="Paste document text here" required></textarea></label>
+            <label>What to focus on<input name="focus" placeholder="risks, deadlines, obligations, simple explanation" /></label>
+            <label>Your role<select name="role"><option>Reader</option><option>Client</option><option>Vendor</option><option>Student</option><option>Manager</option></select></label>
+            <label>Known dates or amounts<input name="known" placeholder="Start date, payment amount, renewal date, penalty amount" /></label>
+            <button class="primary" type="submit">Analyze Document</button>
+          </div>
+          <output class="result-panel" data-result="document"></output>
+        </form>
+      </section>
+
+      <section class="view" id="pricing">
+        <section class="panel pricing-intro">
+          <p class="eyebrow">Monetization</p>
+          <h2>Simple plans that match user value.</h2>
+          <p>Keep the free plan useful, then charge when users need more generations, exports, templates, saved history, or long-document processing.</p>
+        </section>
+        <div class="pricing-grid">
+          <article class="price-card">
+            <h2>Free</h2>
+            <strong>$0</strong>
+            <p>5 generations per month, local saves, basic exports.</p>
+            <button class="secondary" data-plan="Free">Current plan</button>
+          </article>
+          <article class="price-card highlighted">
+            <h2>Starter</h2>
+            <strong>$5/mo</strong>
+            <p>100 generations, PDF exports, premium templates, email support.</p>
+            <button class="primary" data-plan="Starter">Start checkout</button>
+          </article>
+          <article class="price-card">
+            <h2>Pro</h2>
+            <strong>$12/mo</strong>
+            <p>Unlimited standard tools, long documents, saved brand profiles.</p>
+            <button class="secondary" data-plan="Pro">Start checkout</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="legal">
+        <section class="panel pricing-intro">
+          <p class="eyebrow">Compliance foundation</p>
+          <h2>Built to stay clear and legal from the beginning.</h2>
+          <p>The product should be transparent about AI drafts, data handling, subscriptions, refunds, and restricted use before accepting payments.</p>
+        </section>
+        <div class="legal-layout">
+          <article class="panel">
+            <h2>Privacy Basics</h2>
+            <p>Users should know what data is stored, why it is stored, and how to delete it. This prototype stores projects in the browser only.</p>
+          </article>
+          <article class="panel">
+            <h2>Usage Disclaimer</h2>
+            <p>Generated content is a draft. Users must review outputs before submitting resumes, using study guidance, sending business content, or relying on document summaries.</p>
+          </article>
+          <article class="panel">
+            <h2>Payments</h2>
+            <p>Paid plans must show pricing, renewal terms, cancellation rules, and refund policy before checkout.</p>
+          </article>
+          <article class="panel">
+            <h2>Restricted Use</h2>
+            <p>The app should not be used to create fake qualifications, legal advice, medical advice, financial promises, spam, or deceptive content.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <template id="resultTemplate">
+      <div class="result-actions">
+        <button class="secondary copy-btn" type="button">Copy</button>
+        <button class="secondary save-btn" type="button">Save</button>
+        <button class="secondary download-btn" type="button">Download TXT</button>
+        <button class="secondary print-btn" type="button">Download PDF</button>
+      </div>
+      <div class="result-content"></div>
+    </template>
+
+    <dialog class="modal" id="accountModal">
+      <form method="dialog" class="modal-card" id="accountForm">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h2>Save your workspace profile</h2>
+          </div>
+          <button class="secondary" value="cancel" type="submit">Close</button>
+        </div>
+        <label>Name<input name="name" id="accountName" placeholder="Your name" required /></label>
+        <label>Email<input name="email" id="accountEmail" type="email" placeholder="you@example.com" required /></label>
+        <p class="modal-note">This prototype stores account details in this browser only. Real launch needs secure authentication and database storage.</p>
+        <button class="primary" value="default" type="submit">Save account</button>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="checkoutModal">
+      <form method="dialog" class="modal-card" id="checkoutForm">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Checkout preview</p>
+            <h2 id="checkoutTitle">Upgrade plan</h2>
+          </div>
+          <button class="secondary" value="cancel" type="submit">Close</button>
+        </div>
+        <div class="checkout-summary">
+          <span>Selected plan</span>
+          <strong id="checkoutPlan">Starter</strong>
+          <p id="checkoutCopy">100 generations, exports, and premium templates.</p>
+        </div>
+        <p class="modal-note">This is a safe demo. A real app should connect Stripe, Razorpay, or another payment provider before accepting money.</p>
+        <button class="primary" value="default" type="submit">Activate demo plan</button>
+      </form>
+    </dialog>
+
+    <section class="ai-helper" id="aiHelper" aria-label="AI helper">
+      <button class="ai-fab" id="aiFab" type="button">Ask AI</button>
+      <div class="ai-panel" id="aiPanel" hidden>
+        <div class="ai-panel-head">
+          <div>
+            <p class="eyebrow">Context helper</p>
+            <h2 id="aiHelperTitle">WorkPilot Assistant</h2>
+          </div>
+          <button class="secondary" id="aiCloseBtn" type="button">Close</button>
+        </div>
+        <div class="ai-suggestions" id="aiSuggestions"></div>
+        <div class="ai-answer" id="aiAnswer">
+          Ask what to fill, how to improve, or what is missing in the current tool.
+        </div>
+        <form class="ai-form" id="aiHelpForm">
+          <textarea id="aiQuestion" placeholder="Example: What should I write in achievements?"></textarea>
+          <button class="primary" type="submit">Ask</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "workpilot-ai-productivity-suite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI productivity suite MVP with resume, study planner, meeting notes, content calendar, document analyzer, and AI helper.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
