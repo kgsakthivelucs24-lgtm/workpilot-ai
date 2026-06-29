@@ -7,6 +7,32 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <section class="auth-screen" id="authScreen" aria-label="Sign in">
+      <div class="auth-brand">
+        <div class="brand-mark">WP</div>
+        <div>
+          <strong>WorkPilot AI</strong>
+          <span>AI work studio</span>
+        </div>
+      </div>
+      <div class="auth-card">
+        <p class="eyebrow">Access required</p>
+        <h1>Sign in to use WorkPilot AI</h1>
+        <p>Use Google, phone, or email to access resume, study, meeting, content, and document tools.</p>
+        <button class="auth-provider" id="googleSignIn" type="button">Continue with Google</button>
+        <form class="auth-form" id="emailAuthForm">
+          <label>Email<input id="authEmail" type="email" placeholder="you@example.com" required /></label>
+          <label>Name<input id="authName" placeholder="Your name" required /></label>
+          <button class="primary" type="submit">Continue with Email</button>
+        </form>
+        <form class="auth-form" id="phoneAuthForm">
+          <label>Phone number<input id="authPhone" type="tel" placeholder="+91 98765 43210" /></label>
+          <button class="secondary" type="submit">Continue with Phone</button>
+        </form>
+        <small>Demo sign-in stores your profile in this browser. Production should use secure auth such as Firebase, Supabase, Auth0, or Clerk.</small>
+      </div>
+    </section>
+
     <aside class="sidebar" aria-label="Primary">
       <div class="brand">
         <div class="brand-mark">WP</div>
@@ -292,6 +318,7 @@
         <label>Name<input name="name" id="accountName" placeholder="Your name" required /></label>
         <label>Email<input name="email" id="accountEmail" type="email" placeholder="you@example.com" required /></label>
         <p class="modal-note">This prototype stores account details in this browser only. Real launch needs secure authentication and database storage.</p>
+        <button class="secondary" id="signOutBtn" value="cancel" type="button">Sign out</button>
         <button class="primary" value="default" type="submit">Save account</button>
       </form>
     </dialog>

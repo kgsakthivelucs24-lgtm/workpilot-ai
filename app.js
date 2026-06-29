@@ -48,6 +48,9 @@ function saveState() {
 }
 
 function renderState() {
+  const signedIn = Boolean(state.account.name || state.account.email || state.account.phone);
+  document.body.classList.toggle("auth-locked", !signedIn);
+  $("#authScreen").hidden = signedIn;
   const limit = planCredits[state.plan] || 5;
   $("#credits").textContent = state.credits;
   $("#creditLimit").textContent = state.plan === "Pro" ? " unlimited" : `/${limit} left`;
@@ -56,7 +59,7 @@ function renderState() {
   $("#planName").textContent = state.plan;
   $("#planLabel").textContent = state.plan === "Free" ? "Free credits" : `${state.plan} credits`;
   $("#planBadge").textContent = state.plan === "Free" ? "Trial" : "Active";
-  $("#accountBtn").textContent = state.account.name ? state.account.name : "Sign in";
+  $("#accountBtn").textContent = state.account.name || state.account.email || state.account.phone || "Sign in";
   $("#aiStatus").textContent = state.aiMode === "live" ? "AI: live" : state.aiMode === "local" ? "AI: local" : "AI: checking";
   $("#aiStatus").classList.toggle("live", state.aiMode === "live");
   $("#emptyState").textContent = state.projects.length ? "Saved in this browser" : "Nothing saved yet";
@@ -80,6 +83,26 @@ function renderState() {
     $(".delete-project", item).addEventListener("click", () => deleteProject(project.id));
     list.appendChild(item);
   });
+}
+
+function signIn(account) {
+  state.account = {
+    name: account.name || account.email || account.phone || "WorkPilot User",
+    email: account.email || "",
+    phone: account.phone || "",
+    method: account.method || "email"
+  };
+  saveState();
+  showToast(`Signed in with ${state.account.method}.`);
+}
+
+function signOut() {
+  state.account = {};
+  saveState();
+  $("#accountModal").close();
+  $("#aiPanel").hidden = true;
+  $("#aiFab").hidden = false;
+  showToast("Signed out.");
 }
 
 function setView(id) {
@@ -660,12 +683,39 @@ $("#accountForm").addEventListener("submit", (event) => {
   event.preventDefault();
   state.account = {
     name: $("#accountName").value.trim(),
-    email: $("#accountEmail").value.trim()
+    email: $("#accountEmail").value.trim(),
+    phone: state.account.phone || "",
+    method: state.account.method || "email"
   };
   saveState();
   $("#accountModal").close();
   showToast("Account profile saved.");
 });
+
+$("#googleSignIn").addEventListener("click", () => {
+  signIn({ name: "Google User", email: "google-user@example.com", method: "Google" });
+});
+
+$("#emailAuthForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  signIn({
+    name: $("#authName").value.trim(),
+    email: $("#authEmail").value.trim(),
+    method: "email"
+  });
+});
+
+$("#phoneAuthForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const phone = $("#authPhone").value.trim();
+  if (!phone) {
+    showToast("Enter a phone number.");
+    return;
+  }
+  signIn({ name: phone, phone, method: "phone" });
+});
+
+$("#signOutBtn").addEventListener("click", signOut);
 
 $("#checkoutForm").addEventListener("submit", (event) => {
   if (event.submitter?.value === "cancel") return;
