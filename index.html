@@ -8,28 +8,33 @@
   </head>
   <body>
     <section class="auth-screen" id="authScreen" aria-label="Sign in">
-      <div class="auth-brand">
-        <div class="brand-mark">WP</div>
-        <div>
-          <strong>WorkPilot AI</strong>
-          <span>AI work studio</span>
-        </div>
-      </div>
       <div class="auth-card">
-        <p class="eyebrow">Access required</p>
-        <h1>Sign in to use WorkPilot AI</h1>
-        <p>Use Google, phone, or email to access resume, study, meeting, content, and document tools.</p>
-        <button class="auth-provider" id="googleSignIn" type="button">Continue with Google</button>
+        <div class="auth-logo-row">
+          <div class="brand-mark">WP</div>
+          <div>
+            <strong>WorkPilot AI</strong>
+            <span>AI work studio</span>
+          </div>
+        </div>
+        <p class="auth-kicker">Please enter your details</p>
+        <h1 id="authHeading">Welcome back</h1>
         <form class="auth-form" id="emailAuthForm">
-          <label>Email<input id="authEmail" type="email" placeholder="you@example.com" required /></label>
-          <label>Name<input id="authName" placeholder="Your name" required /></label>
-          <button class="primary" type="submit">Continue with Email</button>
+          <input id="authEmail" type="email" placeholder="Email address" required />
+          <input id="authPassword" type="password" placeholder="Password" required />
+          <input id="authName" class="signup-only" placeholder="Full name" />
+          <div class="auth-options">
+            <label class="check-row"><input id="rememberAuth" type="checkbox" />Remember for 30 days</label>
+            <button class="link-button" id="forgotPasswordBtn" type="button">Forgot password</button>
+          </div>
+          <button class="primary" id="emailAuthSubmit" type="submit">Sign in</button>
         </form>
+        <button class="auth-provider" id="googleSignIn" type="button"><span>G</span> Sign in with Google</button>
         <form class="auth-form" id="phoneAuthForm">
-          <label>Phone number<input id="authPhone" type="tel" placeholder="+91 98765 43210" /></label>
+          <input id="authPhone" type="tel" placeholder="Phone number" />
           <button class="secondary" type="submit">Continue with Phone</button>
         </form>
-        <small>Demo sign-in stores your profile in this browser. Production should use secure auth such as Firebase, Supabase, Auth0, or Clerk.</small>
+        <p class="auth-switch"><span id="authSwitchText">Don't have an account?</span> <button class="link-button" id="authModeBtn" type="button">Sign up</button></p>
+        <small>Demo sign-in stores your profile in this browser. Production should use Firebase, Supabase, Auth0, or Clerk.</small>
       </div>
     </section>
 

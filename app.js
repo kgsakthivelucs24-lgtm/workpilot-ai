@@ -33,7 +33,8 @@ const state = {
   projects: JSON.parse(localStorage.getItem("wp_projects") || "[]"),
   checkoutPlan: "Starter",
   aiMode: "checking",
-  activeView: "dashboard"
+  activeView: "dashboard",
+  authMode: "signin"
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -103,6 +104,16 @@ function signOut() {
   $("#aiPanel").hidden = true;
   $("#aiFab").hidden = false;
   showToast("Signed out.");
+}
+
+function renderAuthMode() {
+  const isSignup = state.authMode === "signup";
+  $("#authHeading").textContent = isSignup ? "Create account" : "Welcome back";
+  $("#emailAuthSubmit").textContent = isSignup ? "Sign up" : "Sign in";
+  $("#authSwitchText").textContent = isSignup ? "Already have an account?" : "Don't have an account?";
+  $("#authModeBtn").textContent = isSignup ? "Sign in" : "Sign up";
+  $("#authName").classList.toggle("show", isSignup);
+  $("#authName").required = isSignup;
 }
 
 function setView(id) {
@@ -698,11 +709,22 @@ $("#googleSignIn").addEventListener("click", () => {
 
 $("#emailAuthForm").addEventListener("submit", (event) => {
   event.preventDefault();
+  const email = $("#authEmail").value.trim();
+  const name = $("#authName").value.trim();
   signIn({
-    name: $("#authName").value.trim(),
-    email: $("#authEmail").value.trim(),
+    name: name || email.split("@")[0],
+    email,
     method: "email"
   });
+});
+
+$("#authModeBtn").addEventListener("click", () => {
+  state.authMode = state.authMode === "signin" ? "signup" : "signin";
+  renderAuthMode();
+});
+
+$("#forgotPasswordBtn").addEventListener("click", () => {
+  showToast("Password reset will be available after real auth is connected.");
 });
 
 $("#phoneAuthForm").addEventListener("submit", (event) => {
@@ -744,4 +766,5 @@ $("#aiHelpForm").addEventListener("submit", (event) => {
 
 renderState();
 renderHelperSuggestions();
+renderAuthMode();
 checkAiStatus();
