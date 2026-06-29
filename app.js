@@ -50,6 +50,7 @@ function saveState() {
 
 function renderState() {
   const signedIn = Boolean(state.account.name || state.account.email || state.account.phone);
+  const displayName = state.account.name || state.account.email || state.account.phone || "User";
   document.body.classList.toggle("auth-locked", !signedIn);
   $("#authScreen").hidden = signedIn;
   const limit = planCredits[state.plan] || 5;
@@ -60,7 +61,9 @@ function renderState() {
   $("#planName").textContent = state.plan;
   $("#planLabel").textContent = state.plan === "Free" ? "Free credits" : `${state.plan} credits`;
   $("#planBadge").textContent = state.plan === "Free" ? "Trial" : "Active";
-  $("#accountBtn").textContent = state.account.name || state.account.email || state.account.phone || "Sign in";
+  $("#accountBtn").textContent = displayName;
+  $("#sidebarUserName").textContent = displayName;
+  $("#welcomeLine").textContent = signedIn ? `Welcome, ${displayName}` : "Welcome back";
   $("#aiStatus").textContent = state.aiMode === "live" ? "AI: live" : state.aiMode === "local" ? "AI: local" : "AI: checking";
   $("#aiStatus").classList.toggle("live", state.aiMode === "live");
   $("#emptyState").textContent = state.projects.length ? "Saved in this browser" : "Nothing saved yet";
@@ -112,8 +115,18 @@ function renderAuthMode() {
   $("#emailAuthSubmit").textContent = isSignup ? "Sign up" : "Sign in";
   $("#authSwitchText").textContent = isSignup ? "Already have an account?" : "Don't have an account?";
   $("#authModeBtn").textContent = isSignup ? "Sign in" : "Sign up";
+  $("#googleAuthText").textContent = isSignup ? "Sign up with Google" : "Sign in with Google";
+  $("#facebookAuthText").textContent = isSignup ? "Sign up with Facebook" : "Sign in with Facebook";
+  $("#phoneAuthSubmit").textContent = isSignup ? "Sign up with Phone" : "Sign in with Phone";
+  $("#authSignInTab").classList.toggle("active", !isSignup);
+  $("#authSignUpTab").classList.toggle("active", isSignup);
   $("#authName").classList.toggle("show", isSignup);
   $("#authName").required = isSignup;
+}
+
+function setAuthMode(mode) {
+  state.authMode = mode;
+  renderAuthMode();
 }
 
 function setView(id) {
@@ -707,6 +720,10 @@ $("#googleSignIn").addEventListener("click", () => {
   signIn({ name: "Google User", email: "google-user@example.com", method: "Google" });
 });
 
+$("#facebookSignIn").addEventListener("click", () => {
+  signIn({ name: "Facebook User", email: "facebook-user@example.com", method: "Facebook" });
+});
+
 $("#emailAuthForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const email = $("#authEmail").value.trim();
@@ -719,9 +736,12 @@ $("#emailAuthForm").addEventListener("submit", (event) => {
 });
 
 $("#authModeBtn").addEventListener("click", () => {
-  state.authMode = state.authMode === "signin" ? "signup" : "signin";
-  renderAuthMode();
+  setAuthMode(state.authMode === "signin" ? "signup" : "signin");
 });
+
+$("#authSignInTab").addEventListener("click", () => setAuthMode("signin"));
+
+$("#authSignUpTab").addEventListener("click", () => setAuthMode("signup"));
 
 $("#forgotPasswordBtn").addEventListener("click", () => {
   showToast("Password reset will be available after real auth is connected.");

@@ -18,6 +18,10 @@
         </div>
         <p class="auth-kicker">Please enter your details</p>
         <h1 id="authHeading">Welcome back</h1>
+        <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
+          <button class="active" id="authSignInTab" type="button">Sign in</button>
+          <button id="authSignUpTab" type="button">Sign up</button>
+        </div>
         <form class="auth-form" id="emailAuthForm">
           <input id="authEmail" type="email" placeholder="Email address" required />
           <input id="authPassword" type="password" placeholder="Password" required />
@@ -28,10 +32,12 @@
           </div>
           <button class="primary" id="emailAuthSubmit" type="submit">Sign in</button>
         </form>
-        <button class="auth-provider" id="googleSignIn" type="button"><span>G</span> Sign in with Google</button>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <button class="auth-provider" id="googleSignIn" type="button"><span>G</span> <b id="googleAuthText">Sign in with Google</b></button>
+        <button class="auth-provider" id="facebookSignIn" type="button"><span class="facebook-mark">f</span> <b id="facebookAuthText">Sign in with Facebook</b></button>
         <form class="auth-form" id="phoneAuthForm">
           <input id="authPhone" type="tel" placeholder="Phone number" />
-          <button class="secondary" type="submit">Continue with Phone</button>
+          <button class="secondary" id="phoneAuthSubmit" type="submit">Sign in with Phone</button>
         </form>
         <p class="auth-switch"><span id="authSwitchText">Don't have an account?</span> <button class="link-button" id="authModeBtn" type="button">Sign up</button></p>
         <small>Demo sign-in stores your profile in this browser. Production should use Firebase, Supabase, Auth0, or Clerk.</small>
@@ -45,6 +51,10 @@
           <strong>WorkPilot AI</strong>
           <span>AI work studio</span>
         </div>
+      </div>
+      <div class="user-badge">
+        <span>Signed in as</span>
+        <strong id="sidebarUserName">User</strong>
       </div>
       <nav class="nav">
         <button class="nav-item active" data-view="dashboard">Dashboard</button>
@@ -72,6 +82,7 @@
         <div>
           <p class="eyebrow">Workspace</p>
           <h1 id="viewTitle">Dashboard</h1>
+          <p class="welcome-line" id="welcomeLine">Welcome back</p>
         </div>
         <div class="top-actions">
           <button class="secondary ai-status" id="aiStatus" type="button">AI: checking</button>
